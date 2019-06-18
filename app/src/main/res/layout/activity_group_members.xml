@@ -25,33 +25,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:weightSum="2"
+        android:weightSum="3"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/email_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:backgroundTint="#48A853"
             android:text="Email All"
             android:textColor="@android:color/white" />
 
         <Button
-            android:id="@+id/cancel"
+            android:id="@+id/text_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimaryDark"
             android:text="Text All"
             android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/add_member"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:text="ADD MEMBER"
+            android:textColor="@android:color/white" />
+
 
     </LinearLayout>
 </RelativeLayout>
