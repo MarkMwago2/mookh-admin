@@ -5,7 +5,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,7 +21,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.kosgei.mookh.R;
 import me.kosgei.mookh.ui.adapters.GroupListAdapter;
+import me.kosgei.mookh.ui.loginsignup.LoginSignUpActivity;
 import me.kosgei.mookh.ui.model.Group;
+import me.kosgei.mookh.utility.SaveSharedPreference;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,9 +46,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
         groupList.add(new Group("Marketers",1));
-        groupList.add(new Group("Dev",1));
+        groupList.add(new Group("Devs",1));
         groupList.add(new Group("Sales",1));
-        groupList.add(new Group("Creative",1));
+        groupList.add(new Group("Creatives",1));
         groupList.add(new Group("Managers",1));
 
 
@@ -85,5 +91,35 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     {
         groupList.add(new Group(name,1));
         groupListAdapter.notifyDataSetChanged();
+    }
+
+
+
+    // Overflow menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        SaveSharedPreference.setLoggedIn(getApplicationContext(), false);
+
+
+        Intent intent = new Intent(HomeActivity.this, LoginSignUpActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

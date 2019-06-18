@@ -6,11 +6,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.ArrayList;
 
 import me.kosgei.mookh.R;
+import me.kosgei.mookh.ui.HomeActivity;
+import me.kosgei.mookh.utility.SaveSharedPreference;
 
 public class LoginSignUpActivity extends AppCompatActivity {
 
@@ -26,6 +29,14 @@ public class LoginSignUpActivity extends AppCompatActivity {
         pagerAdapter.addFragmet(new LoginFragment());
         pagerAdapter.addFragmet(new RegisterFragment());
         viewPager.setAdapter(pagerAdapter);
+
+        // Check if UserResponse is Already Logged In
+        if(SaveSharedPreference.getLoggedStatus(getApplicationContext())) {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     class LoginSignUpPagerAdapter extends FragmentPagerAdapter {

@@ -27,6 +27,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +38,7 @@ import me.kosgei.mookh.ui.CustomProgress;
 import me.kosgei.mookh.ui.HomeActivity;
 import me.kosgei.mookh.ui.model.User;
 import me.kosgei.mookh.ui.services.MookhService;
+import me.kosgei.mookh.utility.SaveSharedPreference;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -120,7 +123,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         //convert object to json
         Gson gson = new GsonBuilder().create();
-        User user = new User(username.getText().toString().trim(), password.getText().toString().trim());
+
+        Map<String,String> user = new HashMap<>();
+        user.put("username",username.getText().toString().trim());
+        user.put("password",password.getText().toString().trim());
+
+//        User user = new User(username.getText().toString().trim(), password.getText().toString().trim());
+
+
         String json = gson.toJson(user);
 
         OkHttpClient client = new OkHttpClient.Builder().build();
@@ -167,7 +177,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                     JSONObject jsonObject = new JSONObject(json);
                                     Constants.Token = jsonObject.getString("access");
 
-                                    startActivity(new Intent(getActivity() , HomeActivity.class));
+
+                                    Intent intent = new Intent(getActivity() , HomeActivity.class);
+                                    SaveSharedPreference.setLoggedIn(getActivity(), true);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
 
                                 } catch (IOException e) {
                                     e.printStackTrace();
