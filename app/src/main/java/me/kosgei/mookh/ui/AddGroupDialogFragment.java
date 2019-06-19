@@ -52,8 +52,6 @@ public class AddGroupDialogFragment extends DialogFragment {
                 {
                     ((HomeActivity) getActivity()).addGroup(groupName.getText().toString());
                     dismiss();
-                    Toast.makeText(getActivity(), "Group Created", Toast.LENGTH_SHORT).show();
-
                 }
                 else {
                    groupName.setError("Please enter the group name");

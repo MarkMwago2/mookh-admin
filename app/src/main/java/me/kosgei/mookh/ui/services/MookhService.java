@@ -1,15 +1,25 @@
 package me.kosgei.mookh.ui.services;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.kosgei.mookh.ui.Constants;
+import me.kosgei.mookh.ui.model.Group;
 import me.kosgei.mookh.ui.model.User;
+import me.kosgei.mookh.utility.SaveSharedPreference;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -86,5 +96,80 @@ public class MookhService {
         Call call = client.newCall(request);
         call.enqueue(callback);
 
+    }
+
+    //get groups
+    public static void getGroups(Callback callback, Context context)
+    {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.GET_GROUPS).newBuilder();
+
+        String url = urlBuilder.build().toString();
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization",  SaveSharedPreference.getAccessToken(context))
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
+
+    public List<Group> processGroupResult(Response response)
+    {
+        List<Group> groups = new ArrayList<>();
+        if (response.isSuccessful()) {
+            try {
+                String jsonData = response.body().string();
+                JSONArray meals = new JSONArray(jsonData);
+
+                for (int i = 0; i < meals.length(); i++) {
+                    JSONObject jsonObject = meals.getJSONObject(i);
+                    String name = jsonObject.getString("name");
+                    String id = jsonObject.getString("id");
+
+                    Group group = new Group(name, Integer.parseInt(id));
+                    groups.add(group);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return groups;
+
+    }
+
+    //add groups
+    public static void addGroup(Callback callback,String name,Context context)
+    {
+        Map<String,String> group = new HashMap<>();
+        group.put("name",name);
+
+        //convert object to json
+        Gson gson = new GsonBuilder().create();
+        String json = gson.toJson(group);
+
+        Log.d("heyyy", json);
+
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(Constants.GET_GROUPS).newBuilder();
+        String url = urlBuilder.build().toString();
+
+        MediaType MEDIA_TYPE = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(MEDIA_TYPE, json);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization",  SaveSharedPreference.getAccessToken(context))
+                .post(body)
+                .build();
+
+        Call call = client.newCall(request);
+        call.enqueue(callback);
     }
 }

@@ -175,8 +175,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 try {
                                     String json = response.body().string();
                                     JSONObject jsonObject = new JSONObject(json);
-                                    Constants.Token = jsonObject.getString("access");
+                                   // Constants.Token = "Bearer "+jsonObject.getString("access");
 
+                                    SaveSharedPreference.setAccessToken(getActivity(),"Bearer "+jsonObject.getString("access"));
 
                                     Intent intent = new Intent(getActivity() , HomeActivity.class);
                                     SaveSharedPreference.setLoggedIn(getActivity(), true);
